@@ -3,8 +3,14 @@ import SingInLottieData from "../../assets/SingIn.json"
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext/AuthContext";
 import SocialLogin from "../Shared/SocialLogin";
+import { useLocation, useNavigate } from "react-router-dom";
 const SingIn = () => {
   const {singInUser} = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+  console.log(location);
+  const from = location.state || '/';
+  
 
   const handleSingIn = e =>{
     e.preventDefault();
@@ -15,6 +21,7 @@ const SingIn = () => {
     singInUser(email,password)
     .then(result=>{
       console.log(result)
+      navigate(from);
     })
     .catch(error=>{
       console.log(error.message)
