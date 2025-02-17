@@ -1,9 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const JobApply = () => {
   const {id} = useParams();
   const{user} = useAuth();
+  const navigate = useNavigate();
   //console.log(id,user);
 
   const submitApplication = e =>{
@@ -21,6 +23,25 @@ const JobApply = () => {
         github,
         resume
     }
+
+    fetch('http://localhost:3000/job-applications',{
+      method: 'POST',
+      headers : {
+        'content-type' : 'application/json'
+      },
+      body: JSON.stringify(jobApplication)
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.insertedId){
+        Swal.fire({
+          title: "Drag me!",
+          icon: "success",
+          draggable: true
+        });
+        navigate('/myApplication');
+      }
+    })
     
   }
   
