@@ -1,17 +1,42 @@
+import {  useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
 
 
 const Addjob = () => {
+  const {user} = useAuth();
+  const navigate = useNavigate();
 
-  const handleAddJob = e =>{
+  const handleAddJob = e => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const initialData = Object.fromEntries(formData.entries());
     console.log(initialData);
-    const {min,max,currency, ...newJob} = initialData;
+    const { min, max, currency, ...newJob } = initialData;
     console.log(newJob);
-    newJob.salaryRange = {min,max,currency};
+    newJob.salaryRange = { min, max, currency };
     console.log(newJob);
-    
+
+    fetch('http://localhost:3000/job', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(newJob)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.insertedId){
+          Swal.fire({
+            title: "Job add successfully!",
+            icon: "success",
+            draggable: true
+          });
+          navigate('/');
+        }
+      }
+      )
+
   }
   return (
     <div>
@@ -34,6 +59,12 @@ const Addjob = () => {
             <span className="label-text font-bold">Job Location</span>
           </label>
           <input type="text" name="location" placeholder="Job Location" className="input input-bordered" required />
+        </div>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text font-bold">HR Email</span>
+          </label>
+          <input defaultValue={user?.email} type="email" name="hr_email" placeholder="HR Email" className="input input-bordered" required />
         </div>
         <div className="form-control">
           <label className="label">
@@ -70,7 +101,7 @@ const Addjob = () => {
           </div>
           <div className="form-control">
             <select name="currency" className="select select-ghost">
-              <option  disabled selected>Pick a Currency</option>
+              <option disabled selected>Pick a Currency</option>
               <option>BDT</option>
               <option>USD</option>
               <option>IND</option>
