@@ -21,18 +21,11 @@ const HotJobCard = ({ job }) => {
         <h2 className="card-title">{title}
           <div className="badge badge-secondary">NEW</div>
         </h2>
+       
         <p>{description}</p>
-        <div className="flex gap-2 flex-wrap">
-          {
-            // eslint-disable-next-line react/prop-types
-            requirements.map((skill, index) => <p
-              key={index}
-              className="border rounded-md text-center hover:text-blue-500 hover:bg-stone-200"
-            >{skill}</p>)
-          }
-        </div>
+        
         <div className="card-actions justify-end items-center mt-4">
-          <p>Salary : {salaryRange.min} - {salaryRange.max} {salaryRange.currency}</p>
+           {/* <p>Salary : {salaryRange.min} - {salaryRange.max} {salaryRange.currency}</p>  */}
          <Link to={`/jobs/${_id}`}>
          <button className="btn btn-primary">Apply</button>
          </Link>

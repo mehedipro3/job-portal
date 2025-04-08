@@ -2,41 +2,58 @@ import { useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import auth from "../../firebase/firebase.init";
+import axios from "axios";
 const googleProvider = new GoogleAuthProvider();
 // eslint-disable-next-line react/prop-types
-const AuthProvider = ({children}) => {
-  const [user,setUser]=useState(null);
-  const [loading,setLoading]=useState(true);
- 
-  const createUser = (email,password)=>{
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const createUser = (email, password) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth,email,password);
+    return createUserWithEmailAndPassword(auth, email, password);
   }
 
-  const singInUser = (email,password)=>{
+  const singInUser = (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth,email,password);
+    return signInWithEmailAndPassword(auth, email, password);
   }
 
-  const singWithGoogle = ()=>{
+  const singWithGoogle = () => {
     setLoading(true);
-    return signInWithPopup(auth,googleProvider);
+    return signInWithPopup(auth, googleProvider);
   }
 
-  const singOutUser = ()=>{
+  const singOutUser = () => {
     setLoading(true);
     return signOut(auth);
   }
 
-  useEffect(()=>{
-   const unsubscribe = onAuthStateChanged(auth,currentUser =>{
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
-      setLoading(false);
+
+      if (currentUser?.email) {
+        const user = { email: currentUser.email };
+        axios.post('http://localhost:3000/jwt', user, { withCredentials: true })
+          .then(res => {
+            console.log('login token ', res.data);
+            setLoading(false);
+          })
+      }
+      else {
+        axios.post('http://localhost:3000/logout', {}, { withCredentials: true })
+          .then(res => {
+            console.log('logout token ', res.data);
+            setLoading(false);
+          })
+      }
+
     });
-    return ()=>{
+    return () => {
       unsubscribe();
     }
-  },[])
+  }, [])
 
   const authInfo = {
     user,

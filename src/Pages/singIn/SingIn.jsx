@@ -4,28 +4,37 @@ import { useContext } from "react";
 import AuthContext from "../../context/AuthContext/AuthContext";
 import SocialLogin from "../Shared/SocialLogin";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 const SingIn = () => {
-  const {singInUser} = useContext(AuthContext);
+  const { singInUser } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
   console.log(location);
   const from = location.state || '/';
-  
 
-  const handleSingIn = e =>{
+
+  const handleSingIn = e => {
+
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email,password);
-    singInUser(email,password)
-    .then(result=>{
-      console.log(result)
-      navigate(from);
-    })
-    .catch(error=>{
-      console.log(error.message)
-    })
+    console.log(email, password);
+
+    singInUser(email, password)
+      .then(result => {
+        console.log('sing in : ',result.user.email)
+        const user = { email: result.user.email };
+
+        axios.post('http://localhost:3000/jwt', user , {withCredentials : true})
+          .then(res => {
+            console.log(res.data);
+          })
+      navigate(from); 
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
   }
   return (
     <div className="hero bg-base-200 min-h-screen">
