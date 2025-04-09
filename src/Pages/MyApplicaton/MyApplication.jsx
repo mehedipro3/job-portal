@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import UseAxiosSecure from "../../hooks/UseAxiosSecure";
+import useAxiosSecure from "../../hooks/UseAxiosSecure";
 
-const axiosSecure = UseAxiosSecure();
+
 
 const MyApplication = () => {
+  
   const { user } = useAuth();
   const [jobs, setJobs] = useState([]);
+
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     // fetch(`http://localhost:3000/job-application?email=${user.email}`)

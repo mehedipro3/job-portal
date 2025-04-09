@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
-import AuthContext from "../../context/AuthContext/AuthContext";
+
 import jobIcon from "../../assets/icon.png"
+import { AuthContext } from "../../context/AuthContext/AuthProvider";
 const Navbar = () => {
 
   const { user ,singOutUser } = useContext(AuthContext);

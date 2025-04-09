@@ -1,10 +1,10 @@
 import Lottie from "lottie-react";
 import SingInLottieData from "../../assets/SingIn.json"
 import { useContext } from "react";
-import AuthContext from "../../context/AuthContext/AuthContext";
 import SocialLogin from "../Shared/SocialLogin";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthContext/AuthProvider";
 const SingIn = () => {
   const { singInUser } = useContext(AuthContext);
   const location = useLocation();
