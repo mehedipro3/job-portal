@@ -40,4 +40,3 @@ It allows job seekers to browse and apply for jobs, while employers can post and
 
 ---
 
-## 📂 Project Structure
